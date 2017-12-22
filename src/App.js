@@ -1,48 +1,43 @@
 import React, { Component } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import store from './store'
+import PostList from './PostList'
+import PostInsert from './PostInsert'
 
 class App extends Component {
+
   render() {
     return (
-      <Router>
-        <Root/>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <div className="App">
+            <header className="App-header">
+              <Link to={`/`}><h1 className="App-title">My Travel Diary</h1></Link>
+            </header>
+            <div className="App-container">
+              <Route exact={true} path="/" component={PostList}/>
+              <Route path="/post/:id" component={ReadPost}/>
+              <Route path="/create" component={PostInsert}/>
+              <Link className="Post-insert-button" to={`/create`}>New</Link>
+            </div>            
+          </div>
+        </Router>
+      </Provider>
     )
   }
 }
 
-const Root = () => (
-  <div className="App">
-    <header className="App-header">
-      <h1 className="App-title">My Travel Diary</h1>
-    </header>
-    <nav>
-      <Link to={`/`}>All Posts</Link>
-      <Link to={`/create`}>Create a post</Link>
-    </nav>
-    <div className="App-intro">
-      <Route exact={true} path="/" component={ListPosts}/>
-      <Route path="/post/:id" component={ReadPost}/>
-      <Route path="/create" component={InsertPost}/>
-    </div>
-  </div>
-)
+class ReadPost extends React.Component {
 
-const ListPosts = () => (
-  <h1>List the diary</h1>
-)
+  render() {
+   return (  
+      <h1>Single post {this.props.id}</h1>
+    )
+  }
+} 
 
-const ReadPost = (props) => {
-  let id = props.match.params.id
-  return (  
-    <h1>Single post {id}</h1>
-  )
-}
-  
 
-const InsertPost = () => (
-  <h1>Insert a new post</h1>
-)
 
 export default App
